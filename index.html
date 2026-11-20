@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+<title>VENNX TOOLS</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#070505;--card:linear-gradient(160deg,#1a0f0f,#0c0808);--bd:#2d1a1a;--red:#ff3b3b;--redD:#d92b2b;--txt:#fff;--mut:#a07f7f}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{height:100vh;background:#000;font-family:'Plus Jakarta Sans',sans-serif;display:flex;justify-content:center;overflow:hidden}
+.app{position:relative;width:100%;max-width:430px;height:100dvh;background:var(--bg);display:flex;flex-direction:column;overflow:hidden;color:var(--txt)}
+.cross{position:absolute;top:50%;left:50%;width:40px;height:40px;transform:translate(-50%,-50%);border:2px solid rgba(255,59,59,.5);border-radius:50%;pointer-events:none;z-index:100;display:none}
+.aim .cross{display:block}
+.cross::before,.cross::after{content:'';position:absolute;background:rgba(255,59,59,.8)}
+.cross::before{top:50%;left:-10px;right:-10px;height:2px}
+.cross::after{left:50%;top:-10px;bottom:-10px;width:2px}
+.fps{position:absolute;top:70px;right:20px;background:rgba(0,0,0,.85);color:#ff5c5c;font-family:monospace;font-size:14px;font-weight:bold;padding:6px 12px;border-radius:8px;border:1px solid #3d1f1f;z-index:50;display:none;box-shadow: 0 4px 12px rgba(0,0,0,0.5)}
+.fpsOn .fps{display:block}
+.sb{display:flex;justify-content:space-between;align-items:center;padding:10px 18px 2px;font-size:11px;font-weight:600;color:#dccfcf}
+.sbR{display:flex;align-items:center;gap:6px}.sbR svg{height:11px;fill:#dccfcf}
+.tb{display:flex;align-items:center;justify-content:space-between;padding:10px 16px 14px}
+.br{display:flex;align-items:center;gap:10px}
+.bI{width:38px;height:38px;border-radius:12px;background:radial-gradient(circle at 30% 15%,#421b1b,#110808);border:1px solid #3b1d1d;display:grid;place-items:center}
+.bI svg{width:21px;height:21px}.bT h1{font-size:13.5px;font-weight:800;letter-spacing:.5px}.bT p{font-size:9.5px;color:#8c6b6b;margin-top:2px}
+.tA{display:flex;gap:8px}.iB{width:36px;height:36px;border-radius:50%;background:#1f1111;border:1px solid #3b1d1d;display:grid;place-items:center;cursor:pointer}
+.iB svg{width:15px;height:15px;fill:var(--red)}
+.cT{flex:1;overflow-y:auto;padding:4px 16px 28px;scrollbar-width:none}
+.cT::-webkit-scrollbar{display:none}
+.pg{display:none}.pg.act{display:block}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:14px;margin-bottom:10px}
+.cH{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.chip{display:inline-flex;align-items:center;gap:5px;background:#221515;border:1px solid #3b2222;color:#b39b9b;font-size:9.5px;font-weight:700;padding:3px 9px;border-radius:99px}
+.chip svg{width:10px;height:10px;color:var(--red)}
+.tag{background:var(--redD);color:#fff;font-size:9.5px;font-weight:800;padding:4px 10px;border-radius:99px}
+.card h3{color:var(--red);font-size:15px;font-weight:700;margin-bottom:6px}
+.card p{color:var(--mut);font-size:11.5px;line-height:1.55;margin-bottom:12px}
+.cF{display:flex;justify-content:flex-end}
+.gr2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.gr2 .card{margin-bottom:0;display:flex;flex-direction:column;justify-content:space-between}
+.gr2 .card p{font-size:10.5px}
+.tg{width:46px;height:26px;border-radius:99px;background:#221515;border:1px solid #3b2222;position:relative;cursor:pointer;transition:.2s}
+.tg::after{content:'';position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#5c4545;transition:.25s}
+.tg.on{background:var(--redD);border-color:var(--redD)}
+.tg.on::after{left:23px;background:#fff}
+.sR{display:flex;align-items:center;gap:12px;padding:14px 4px}
+.sL{font-size:12.5px;font-weight:700;color:#f4eaea;flex-shrink:0}
+.sl{position:relative;flex:1;height:20px;cursor:pointer;touch-action:none}
+.sl::before{content:'';position:absolute;left:0;right:0;top:50%;height:6px;transform:translateY(-50%);background:#2d1a1a;border-radius:99px}
+.sF{position:absolute;left:0;right:0;top:50%;height:6px;transform:translateY(-50%);border-radius:99px;background:linear-gradient(90deg,#ff3b3b,#ff7b5c);clip-path:inset(0 calc(100% - var(--p,50%)) 0 0)}
+.sT{position:absolute;top:50%;left:clamp(12px,var(--p,50%),calc(100% - 12px));transform:translate(-50%,-50%);width:24px;height:14px;border-radius:8px;background:var(--red)}
+.sV{font-size:12px;font-weight:700;color:#f4eaea;min-width:36px;text-align:right}
+.gC{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:12px 12px 6px;margin-bottom:16px;position:relative;overflow:hidden}
+.gCv{width:100%;height:110px;display:block}
+.gO{position:absolute;bottom:12px;left:16px;right:16px;pointer-events:none}
+.gT{font-size:9px;color:#a86b6b;font-weight:700;display:flex;justify-content:space-between}
+.gP{font-size:8.5px;color:#7a4a4a;margin-top:2px}
+.gD{position:absolute;top:10px;left:50%;transform:translateX(-50%);font-size:10px;font-weight:800;color:#fff}
+.lC{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:4px 0}
+.lI{display:flex;align-items:center;gap:14px;padding:14px 16px;border-bottom:1px solid rgba(255,255,255,.03)}
+.lI:last-child{border-bottom:none}
+.lIc{width:24px;height:24px;display:grid;place-items:center;color:var(--red)}
+.lIc svg{width:16px;height:16px;fill:currentColor}
+.lT h4{font-size:12px;font-weight:700;margin-bottom:2px}
+.lT p{font-size:10px;color:var(--mut);font-weight:500}
+.stA{color:var(--red)!important;font-weight:700}
+.bN{display:flex;align-items:center;justify-content:space-between;padding:12px 20px calc(14px + env(safe-area-inset-bottom));border-top:1px solid rgba(255,255,255,.03);background:var(--bg)}
+.nI{display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;color:#7a6b6b;font-family:inherit;font-size:9.5px;font-weight:600;padding:6px 10px;border-radius:99px;cursor:pointer}
+.nI svg{width:20px;height:20px;fill:currentColor}
+.nI.act{flex-direction:row;gap:7px;background:var(--redD);color:#fff;font-size:12px;font-weight:800;padding:10px 16px}
+.ts{position:absolute;left:50%;bottom:92px;transform:translateX(-50%) translateY(10px);background:#2a1212;color:#ff6b6b;border:1px solid #4a1f1f;padding:9px 18px;border-radius:99px;font-size:12px;font-weight:700;opacity:0;pointer-events:none;transition:.2s;z-index:60}
+.ts.sh{opacity:1;transform:translateX(-50%) translateY(0)}
+.compact-ui .card{padding:8px;margin-bottom:6px}
+</style>
+</head>
+<body>
+<div class="app" id="appC">
+<div class="cross"></div>
+<div class="fps" id="fpsC">OptimazeCo: 60 FPS</div>
+<div class="sb"><span>06.05</span><div class="sbR"><svg viewBox="0 0 24 24"><path d="M12 20.6 8.5 16.6a5.3 5.3 0 0 1 7 0L12 20.6Zm-5.9-6.7a10.2 10.2 0 0 1 11.8 0l-2 2.3a7.3 7.3 0 0 0-7.8 0l-2-2.3ZM2.4 10a15.4 15.4 0 0 1 19.2 0l-2 2.3a12.4 12.4 0 0 0-15.2 0L2.4 10Z"/></svg><span>89%</span><svg viewBox="0 0 26 16" style="width:20px"><rect x="1" y="2" width="20" height="12" rx="3.5" fill="none" stroke="#dccfcf" stroke-width="1.4"/><rect x="3.2" y="4.2" width="12" height="7.6" rx="1.6"/><rect x="22.5" y="5.5" width="2.2" height="5" rx="1.1"/></svg></div></div>
+<header class="tb">
+<div class="br">
+<div class="bI"><svg viewBox="0 0 24 24"><path d="M12 2.2 4.6 5.1v5.8c0 4.9 3.1 8.6 7.4 10.1 4.3-1.5 7.4-5.2 7.4-10.1V5.1L12 2.2Z" fill="#ff3b3b"/><path d="M12.9 6.8 9.1 12h2.5l-.6 4.4 3.8-5.2h-2.5l.6-4.4Z" fill="#1a0505"/></svg></div>
+<div class="bT"><h1>VENNX TOOLS V.1.1</h1><p>Version 1.1 - Tools Inject</p></div>
+</div>
+<div class="tA">
+<button class="iB" onclick="showToast('Audio ON')"><svg viewBox="0 0 24 24"><path d="M12 1a9 9 0 0 0-9 9v7c0 1.66 1.34 3 3 3h3v-8H5v-2a7 7 0 0 1 14 0v2h-4v8h3c1.66 0 3-1.34 3-3v-7a9 9 0 0 0-9-9z"/></svg></button>
+<button class="iB" onclick="showToast('Exit')"><svg viewBox="0 0 24 24"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5-5-5zM4 5h8V3H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h8v-2H4V5z"/></svg></button>
+</div>
+</header>
+<main class="cT">
+<section class="pg" id="p-hm">
+<div class="gC"><div class="gD" id="gD">56.6 dips</div><canvas id="cG" class="gCv"></canvas><div class="gO"><div class="gT"><span>CPU Bias: 46.9%</span><span>CPU Per: 60.1%</span><span>Thread: 56.9%</span></div><div class="gP">Performance Monitor</div></div></div>
+<div class="lC">
+<div class="lI"><div class="lIc"><svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg></div><div class="lT"><h4>API Request</h4><p>Shizuku API v1.0.0</p></div></div>
+<div class="lI"><div class="lIc"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg></div><div class="lT"><h4>Library Status</h4><p class="stA">[ ACTIVE ]</p></div></div>
+<div class="lI"><div class="lIc"><svg viewBox="0 0 24 24"><path d="M9 3v2H4v14h16V5h-5V3H9zm2 16H6V7h10v12h-5z"/></svg></div><div class="lT"><h4>Manager Version</h4><p>v1.1.0</p></div></div>
+<div class="lI"><div class="lIc"><svg viewBox="0 0 24 24"><path d="M21 4H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zM3 18V6h18v12H3z"/></svg></div><div class="lT"><h4>Device Model</h4><p>RUS</p></div></div>
+<div class="lI"><div class="lIc"><svg viewBox="0 0 24 24"><path d="M17 1.01L7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 19H7V5h10v14z"/></svg></div><div class="lT"><h4>Device</h4><p>VW_A1240is</p></div></div>
+<div class="lI"><div class="lIc"><svg viewBox="0 0 24 24"><path d="M6 18c0 .55.45 1 1 1h1v3c0 .55.45 1 1 1s1-.45 1-1v-3h2v3c0 .55.45 1 1 1s1-.45 1-1v-3h1c.55 0 1-.45 1-1V9H6v9z"/></svg></div><div class="lT"><h4>Android Version</h4><p>10</p></div></div>
+</div>
+</section>
+<section class="pg act" id="p-tl">
+<article class="card"><div class="cH"><div class="chip"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="10" width="3.2" height="8" rx="1.6"/><rect x="8" y="6" width="3.2" height="12" rx="1.6"/><rect x="13" y="8" width="3.2" height="10" rx="1.6"/><rect x="18" y="4" width="3.2" height="14" rx="1.6"/></svg> 4.7kb</div><span class="tag">Sensitivity</span></div><h3>Dynamic Sensitivity</h3><p>can set higher sensitivity for fast screen movements.</p><div class="cF"><button class="tg" data-f="sm" data-n="Dynamic Sensitivity"></button></div></article>
+<article class="card"><div class="cH"><div class="chip"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="7" fill="none" stroke="currentColor" stroke-width="2"/></svg> 7.9kb</div><span class="tag">AimDrag</span></div><h3>AimDragPath</h3><p>help users direct objects or characters to targets more quickly.</p><div class="cF"><button class="tg" data-f="am" data-n="AimDragPath"></button></div></article>
+<div class="sR"><span class="sL">TacixSen</span><div class="sl" id="s1" style="--p:83.33%"><div class="sF"></div><div class="sT"></div></div><span class="sV" id="v1">0.5F</span></div>
+<article class="card"><div class="cH"><div class="chip"><svg viewBox="0 0 24 24"><rect x="2.5" y="7" width="19" height="10" rx="5" fill="none" stroke="currentColor" stroke-width="1.8"/></svg> 15.5kb</div><span class="tag">Controller</span></div><h3>Recoil Controller</h3><p>help users direct objects or characters to targets more quickly.</p><div class="cF"><button class="tg" data-f="rc" data-n="Recoil Controller"></button></div></article>
+</section>
+<section class="pg" id="p-st">
+<div class="gr2" style="margin-bottom:10px">
+<article class="card"><div><div class="cH" style="margin-bottom:6px"><h3 style="margin:0">DPI-Manager</h3><span class="tag" style="padding:2px 6px;font-size:8px">DPI</span></div><p>change DPI settings automatically.</p></div><div class="cF"><button class="tg" data-f="dp" data-n="DPI"></button></div></article>
+<article class="card"><div><div class="cH" style="margin-bottom:6px"><h3 style="margin:0">Resolusi</h3><span class="tag" style="padding:2px 6px;font-size:8px">RES</span></div><p>change RESOLUSI settings automatically.</p></div><div class="cF"><button class="tg" data-f="rs" data-n="Resolusi"></button></div></article>
+</div>
+<article class="card"><div class="cH" style="margin-bottom:6px"><h3 style="margin:0">Sensitivity Control</h3><span class="tag" style="padding:2px 6px;font-size:8px">Custom</span></div>
+<div class="sR" style="padding:10px 0"><span class="sL" style="width:80px;color:#b39b9b">Sensitiv X</span><div class="sl" id="s2" style="--p:50%"><div class="sF"></div><div class="sT"></div></div><span class="sV" id="v2">50</span></div>
+<div class="sR" style="padding:10px 0;border-top:1px solid rgba(255,255,255,.05)"><span class="sL" style="width:80px;color:#b39b9b">Sensitiv Y</span><div class="sl" id="s3" style="--p:50%"><div class="sF"></div><div class="sT"></div></div><span class="sV" id="v3">50</span></div>
+</article>
+<article class="card" style="margin-bottom:10px"><div class="cH"><div class="chip"><svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.488.488 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 0 0-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6A3.6 3.6 0 1 1 12 8.4a3.6 3.6 0 0 1 0 7.2z"/></svg> 15.3kb</div><span class="tag">Optimize</span></div><h3>OptimazeCo</h3><p>improve the overall performance of their Android device.</p><div class="cF"><button class="tg" data-f="fp" data-n="OptimazeCo"></button></div></article>
+<div class="gr2">
+<article class="card"><div><div class="cH" style="margin-bottom:6px"><h3 style="margin:0">RepidSync</h3><span class="tag" style="padding:2px 6px;font-size:8px">Sync</span></div><p>experience faster and more efficient data.</p></div><div class="cF"><button class="tg" data-f="sc" data-n="RepidSync"></button></div></article>
+<article class="card"><div><div class="cH" style="margin-bottom:6px"><h3 style="margin:0">Compact Aim</h3><span class="tag" style="padding:2px 6px;font-size:8px">C-Aim</span></div><p>Density aims to the neck for Easier.</p></div><div class="cF"><button class="tg" data-f="cp" data-n="Compact Aim"></button></div></article>
+</div>
+</section>
+<section class="pg" id="p-ft"><div style="text-align:center;padding:80px 24px"><h2 style="color:#f4eaea;font-size:16px;font-weight:700;margin-bottom:6px">Features</h2><p style="color:#7a6b6b;font-size:12px;line-height:1.6">Daftar modul<br>yang tersedia.</p></div></section>
+</main>
+<div class="ts" id="tst"></div>
+<nav class="bN">
+<button class="nI" data-p="hm"><svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg><span>Home</span></button>
+<button class="nI act" data-p="tl"><svg viewBox="0 0 24 24"><path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.4-.4.4-1 .1-1.4z"/></svg><span>ToolaX</span></button>
+<button class="nI" data-p="st"><svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.488.488 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 0 0-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6A3.6 3.6 0 1 1 12 8.4a3.6 3.6 0 0 1 0 7.2z"/></svg><span>Settingsx</span></button>
+<button class="nI" data-p="ft"><svg viewBox="0 0 24 24"><path d="M3 3h7.5v7.5H3V3zm10.5 0H21v7.5h-7.5V3zM3 13.5h7.5V21H3v-7.5zM13.5 13.5H21V21h-7.5v-7.5z"/></svg><span>Features</span></button>
+</nav>
+</div>
+<script>
+const tst=document.getElementById('tst');let tT;
+function showToast(m){tst.textContent=m;tst.classList.add('sh');clearTimeout(tT);tT=setTimeout(()=>tst.classList.remove('sh'),1600)}
+const appC=document.getElementById('appC'),fpsC=document.getElementById('fpsC');let fpsI;
+document.querySelectorAll('.tg').forEach(t=>{
+t.addEventListener('click',()=>{
+t.classList.toggle('on');
+const on=t.classList.contains('on'),f=t.dataset.f,n=t.dataset.n;
+showToast(n+': '+(on?'ON':'OFF'));
+if(f==='sm')document.body.style.scrollBehavior=on?'smooth':'auto';
+else if(f==='am')appC.classList.toggle('aim',on);
+else if(f==='dp')document.querySelectorAll('.card').forEach(c=>c.style.transform=on?'scale(1.02)':'scale(1)');
+else if(f==='rs')appC.style.transform=on?'scale(0.95)':'scale(1)';
+else if(f==='fp'){
+appC.classList.toggle('fpsOn',on);
+if(on){fpsI=setInterval(()=>{fpsC.textContent='OptimazeCo: '+Math.floor(Math.random()*5+58)+' FPS'},1000)}
+else clearInterval(fpsI);
+}
+else if(f==='sc'){const s=document.querySelector('.stA');if(s)s.style.textShadow=on?'0 0 8px #ff3b3b':'none'}
+else if(f==='cp')document.body.classList.toggle('compact-ui',on);
+});
+});
+function initS(id,vId,mn,mx,init,unt=''){
+const sl=document.getElementById(id),vE=document.getElementById(vId);
+let val=init;
+function r(){
+const p=((val-mn)/(mx-mn))*100;
+sl.style.setProperty('--p',p.toFixed(2)+'%');
+vE.textContent=(unt==='F'?val.toFixed(1):val.toFixed(0))+unt;
+}
+function sP(x){
+const rct=sl.getBoundingClientRect();
+let t=(x-rct.left)/rct.width;
+t=Math.max(0,Math.min(1,t));
+val=mn+t*(mx-mn);
+r();
+}
+sl.addEventListener('pointerdown',e=>{
+e.preventDefault();
+sl.setPointerCapture(e.pointerId);
+sP(e.clientX);
+const m=ev=>sP(ev.clientX);
+const u=()=>{
+sl.removeEventListener('pointermove',m);
+sl.removeEventListener('pointerup',u);
+sl.removeEventListener('pointercancel',u);
+showToast('Set: '+(unt==='F'?val.toFixed(1):val.toFixed(0))+unt);
+};
+sl.addEventListener('pointermove',m);
+sl.addEventListener('pointerup',u);
+sl.addEventListener('pointercancel',u);
+});
+r();
+}
+initS('s1','v1',0,0.6,0.5,'F');
+initS('s2','v2',0,100,50);
+initS('s3','v3',0,100,50);
+const pgs={hm:document.getElementById('p-hm'),tl:document.getElementById('p-tl'),st:document.getElementById('p-st'),ft:document.getElementById('p-ft')};
+const nIs=document.querySelectorAll('.nI');
+nIs.forEach(b=>{
+b.addEventListener('click',()=>{
+nIs.forEach(x=>x.classList.remove('act'));
+b.classList.add('act');
+document.querySelectorAll('.pg').forEach(p=>p.classList.remove('act'));
+pgs[b.dataset.p].classList.add('act');
+document.querySelector('.cT').scrollTop=0;
+});
+});
+const cnv=document.getElementById('cG'),ctx=cnv.getContext('2d');
+let w,h,dP=[];
+const nP=40;
+for(let i=0;i<nP;i++)dP.push(Math.random()*40+30);
+function rC(){
+const r=cnv.parentElement.getBoundingClientRect();
+cnv.width=r.width-24;
+cnv.height=110;
+w=cnv.width;
+h=cnv.height;
+}
+window.addEventListener('resize',rC);
+rC();
+function dG(){
+ctx.clearRect(0,0,w,h);
+dP.shift();
+let l=dP[dP.length-1];
+let n=l+(Math.random()-.5)*15;
+n=Math.max(10,Math.min(90,n));
+dP.push(n);
+const g=ctx.createLinearGradient(0,0,0,h);
+g.addColorStop(0,'rgba(255,59,59,.4)');
+g.addColorStop(1,'rgba(255,59,59,0)');
+ctx.beginPath();
+ctx.moveTo(0,h);
+const s=w/(nP-1);
+for(let i=0;i<nP;i++){
+const y=h-(dP[i]/100*h),x=i*s;
+ctx.lineTo(x,y);
+}
+ctx.lineTo(w,h);
+ctx.fillStyle=g;
+ctx.fill();
+ctx.beginPath();
+for(let i=0;i<nP;i++){
+const y=h-(dP[i]/100*h),x=i*s;
+if(i===0)ctx.moveTo(x,y);
+else ctx.lineTo(x,y);
+}
+ctx.strokeStyle='#ff3b3b';
+ctx.lineWidth=2;
+ctx.stroke();
+const m=Math.floor(nP/2);
+const d=document.getElementById('gD');
+if(d)d.textContent=(100-dP[m]).to
